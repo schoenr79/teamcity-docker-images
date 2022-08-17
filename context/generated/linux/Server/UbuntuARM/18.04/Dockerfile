@@ -1,7 +1,9 @@
 # Default arguments
-ARG gitLinuxComponentVersion='1:2.17.1-1ubuntu0.9'
-ARG jdkServerLinuxARM64Component='https://corretto.aws/downloads/resources/8.292.10.1/amazon-corretto-8.292.10.1-linux-aarch64.tar.gz'
-ARG jdkServerLinuxARM64ComponentMD5SUM='b0b989af7b8635d0dd0724707206b67c'
+ARG gitLFSLinuxComponentVersion='2.3.4-1'
+ARG gitLinuxComponentVersion='1:2.37.1-0ppa1~ubuntu18.04.1'
+ARG jdkServerLinuxARM64Component='https://corretto.aws/downloads/resources/11.0.15.9.1/amazon-corretto-11.0.15.9.1-linux-aarch64.tar.gz'
+ARG jdkServerLinuxARM64ComponentMD5SUM='9da32690c0b037569e6c622a6795ac80'
+ARG repo=''
 ARG ubuntuImage='ubuntu:18.04'
 
 # The list of required arguments
@@ -9,6 +11,7 @@ ARG ubuntuImage='ubuntu:18.04'
 # ARG jdkServerLinuxARM64ComponentMD5SUM
 # ARG ubuntuImage
 # ARG gitLinuxComponentVersion
+# ARG gitLFSLinuxComponentVersion
 
 
 
@@ -57,8 +60,13 @@ EXPOSE 8111
 
 ARG gitLinuxComponentVersion
 
+ARG gitLFSLinuxComponentVersion
+
 RUN apt-get update && \
-    apt-get install -y git=${gitLinuxComponentVersion} mercurial && \
+    apt-get install -y mercurial software-properties-common && \
+    add-apt-repository ppa:git-core/ppa -y && \
+    apt-get install -y git=${gitLinuxComponentVersion} git-lfs=${gitLFSLinuxComponentVersion} && \
+    git lfs install --system && \
     # https://github.com/goodwithtech/dockle/blob/master/CHECKPOINT.md#dkl-di-0005
     apt-get clean && rm -rf /var/lib/apt/lists/*
 

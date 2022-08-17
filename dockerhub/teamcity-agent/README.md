@@ -4,7 +4,8 @@
 
 This is an official [JetBrains TeamCity](https://www.jetbrains.com/teamcity/) build agent image.
 
-<img src="https://raw.githubusercontent.com/JetBrains/teamcity-docker-images/master/logo/GitHub.png" height="20" align="center"/> More details about tags and components are [here](https://github.com/JetBrains/teamcity-docker-images/blob/master/generated/teamcity-agent.md) .
+<img src="https://raw.githubusercontent.com/JetBrains/teamcity-docker-images/master/logo/GitHub.png" height="20" align="center"/> More details about tags and components are 
+[here](https://github.com/JetBrains/teamcity-docker-images/blob/master/context/generated/teamcity-agent.md) .
 
 The [TeamCity build agent](https://www.jetbrains.com/help/teamcity/build-agent.html) connects to the TeamCity server and spawns the actual build processes.
 You can use the ```jetbrains/teamcity-server``` image to run a TeamCity server. To learn how you can start the TeamCity server together with agents in one go, see these [Docker Compose samples](https://github.com/JetBrains/teamcity-docker-samples).
@@ -27,14 +28,14 @@ and use the following command to start a container with TeamCity agent running i
 a Linux container:
 
 ```
-docker run -it -e SERVER_URL="<url to TeamCity server>"  \ 
+docker run -e SERVER_URL="<url to TeamCity server>"  \ 
     -v <path to agent config folder>:/data/teamcity_agent/conf  \      
     jetbrains/teamcity-agent
 ```
 &nbsp;
 or a Windows container:
 ```
-docker run -it -e SERVER_URL="<url to TeamCity server>"
+docker run -e SERVER_URL="<url to TeamCity server>"
     -v <path to agent config folder>:C:/BuildAgent/conf
     jetbrains/teamcity-agent
 ```
@@ -73,7 +74,7 @@ You can use other than `/opt/buildagent/` source path prefix on the host machine
 
 In a Linux container, if you need a Docker daemon available inside your builds, you have two options.
 
-Regardless of the selected option, the __Docker service inside the container must be started under the root user__. The recommended approach is to use the TeamCity agent `linux-sudo` image that provides the sudo access. Alternatively, if you use a non-sudo agent image, you can run the whole container under the root user by passing `-u 0`.
+Regardless of the selected option, the __Docker service inside the container must be started under the root user__. The recommended approach is to use the TeamCity agent image with the `-linux-sudo` tag suffix that provides the sudo access. Alternatively, if you use a non-sudo agent image, you can run the whole container under the root user by passing `-u 0`.
 
 Initially, the Docker is stopped inside the container. To run it, pass the `-e DOCKER_IN_DOCKER=start` environment variable.
 
@@ -84,7 +85,7 @@ Read more about [Docker security at OWASP](https://cheatsheetseries.owasp.org/ch
 1) Docker from the host (in this case you will benefit from the caches shared between the host and all your containers but there is a security concern: your build might actually harm your host Docker, so use it at your own risk) 
 
 ```
-docker run -it -e SERVER_URL="<url to TeamCity server>"  \
+docker run -e SERVER_URL="<url to TeamCity server>"  \
     -u 0 \
     -v <path to agent config folder>:/data/teamcity_agent/conf \
     -v /var/run/docker.sock:/var/run/docker.sock  \
@@ -104,9 +105,9 @@ If you omit these options, you can run several build agents (you need to specify
 The problem is, that multiple agent containers would use the same (`/opt/buildagent/*`) directories as they are mounted from the host machine to the agent container and that the docker wrapper mounts the directories from the host to the nested docker wrapper container. And, you cannot use multiple agent containers with *different paths* on the host as the docker wrapper would still try to map the paths as they are in the agent container, but from the host machine to the nested docker wrapper container. To make several agents work with docker wrapper and docker.sock option, one have to build different teamcity-agent docker images with different paths of teamcity-agent installation inside those images (like `/opt/buildagentN`), and start those images with corresponding parameters like `-v /opt/buildagent1/work:/opt/buildagent1/work` etc.
 
 
-2) New Docker daemon running within your container (note that in this case the container should be run with the **—-privileged** flag, which is also risky from the security perspective). We recommend running such builds on the `linux-sudo` TeamCity image.
+2) New Docker daemon running within your container (note that in this case the container should be run with the **—-privileged** flag, which is also risky from the security perspective). We recommend running such builds on the TeamCity image with the `-linux-sudo` tag suffix.
 ```
-docker run -it -e SERVER_URL="<url to TeamCity server>"  \
+docker run -e SERVER_URL="<url to TeamCity server>"  \
     -v <path to agent config folder>:/data/teamcity_agent/conf \
     -v docker_volumes:/var/lib/docker \
     --privileged -e DOCKER_IN_DOCKER=start \    
@@ -126,7 +127,7 @@ You can customize the image via the usual Docker procedure:
 
 1. Run the image
 ```
-docker run -it -e SERVER_URL="<url to TeamCity server>"  \ 
+docker run -e SERVER_URL="<url to TeamCity server>"  \ 
     -v <path to agent config folder>:/data/teamcity_agent/conf  \
     --name="my-customized-agent"  \
     jetbrains/teamcity-minimal-agent  \

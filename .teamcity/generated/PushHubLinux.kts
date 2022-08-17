@@ -42,6 +42,58 @@ removeImageAfterPush = false
 }
 
 dockerCommand {
+name = "pull teamcity-agent%docker.buildImagePostfix%:EAP-linux-arm64-sudo"
+commandType = other {
+subCommand = "pull"
+commandArgs = "%docker.buildRepository%teamcity-agent%docker.buildImagePostfix%:EAP-linux-arm64-sudo"
+}
+}
+
+dockerCommand {
+name = "tag teamcity-agent%docker.buildImagePostfix%:EAP-linux-arm64-sudo"
+commandType = other {
+subCommand = "tag"
+commandArgs = "%docker.buildRepository%teamcity-agent%docker.buildImagePostfix%:EAP-linux-arm64-sudo %docker.deployRepository%teamcity-agent:EAP-linux-arm64-sudo"
+}
+}
+
+dockerCommand {
+name = "push teamcity-agent%docker.buildImagePostfix%:EAP-linux-arm64-sudo"
+commandType = push {
+namesAndTags = """
+%docker.deployRepository%teamcity-agent:EAP-linux-arm64-sudo
+""".trimIndent()
+removeImageAfterPush = false
+}
+}
+
+dockerCommand {
+name = "pull teamcity-agent%docker.buildImagePostfix%:EAP-linux-arm64"
+commandType = other {
+subCommand = "pull"
+commandArgs = "%docker.buildRepository%teamcity-agent%docker.buildImagePostfix%:EAP-linux-arm64"
+}
+}
+
+dockerCommand {
+name = "tag teamcity-agent%docker.buildImagePostfix%:EAP-linux-arm64"
+commandType = other {
+subCommand = "tag"
+commandArgs = "%docker.buildRepository%teamcity-agent%docker.buildImagePostfix%:EAP-linux-arm64 %docker.deployRepository%teamcity-agent:EAP-linux-arm64"
+}
+}
+
+dockerCommand {
+name = "push teamcity-agent%docker.buildImagePostfix%:EAP-linux-arm64"
+commandType = push {
+namesAndTags = """
+%docker.deployRepository%teamcity-agent:EAP-linux-arm64
+""".trimIndent()
+removeImageAfterPush = false
+}
+}
+
+dockerCommand {
 name = "pull teamcity-agent%docker.buildImagePostfix%:EAP-linux"
 commandType = other {
 subCommand = "pull"
@@ -122,7 +174,7 @@ removeImageAfterPush = false
 }
 features {
 freeDiskSpace {
-requiredSpace = "4gb"
+requiredSpace = "6gb"
 failBuild = true
 }
 dockerSupport {
@@ -136,7 +188,7 @@ forceCleanCheckout = true
 }
 }
 params {
-param("system.teamcity.agent.ensure.free.space", "4gb")
+param("system.teamcity.agent.ensure.free.space", "6gb")
 }
 requirements {
 contains("docker.server.osType", "linux")

@@ -4,7 +4,7 @@
 
 This is an official [JetBrains TeamCity](https://www.jetbrains.com/teamcity/) minimal build agent image.
 
-<img src="https://raw.githubusercontent.com/JetBrains/teamcity-docker-images/master/logo/GitHub.png" height="20" align="center"/> More details about tags and components are [here](https://github.com/JetBrains/teamcity-docker-images/blob/master/generated/teamcity-minimal-agent.md).
+<img src="https://raw.githubusercontent.com/JetBrains/teamcity-docker-images/master/logo/GitHub.png" height="20" align="center"/> More details about tags and components are [here](https://github.com/JetBrains/teamcity-docker-images/blob/master/context/generated/teamcity-minimal-agent.md).
 
 The [TeamCity build agent](https://www.jetbrains.com/help/teamcity/build-agent.html) connects to the TeamCity server and spawns the actual build processes.
 You can use the ```jetbrains/teamcity-server``` image to run a TeamCity server. To learn how you can start the TeamCity server together with agents in one go, see these [Docker Compose samples](https://github.com/JetBrains/teamcity-docker-samples).
@@ -23,14 +23,14 @@ and use the following command to start a container with TeamCity agent running i
 a Linux container:
 
 ```
-docker run -it -e SERVER_URL="<url to TeamCity server>"  \ 
+docker run -e SERVER_URL="<url to TeamCity server>"  \ 
     -v <path to agent config folder>:/data/teamcity_agent/conf  \      
     jetbrains/teamcity-minimal-agent
 ```
 &nbsp;
 or a Windows container:
 ```
-docker run -it -e SERVER_URL="<url to TeamCity server>" 
+docker run -e SERVER_URL="<url to TeamCity server>" 
     -v <path to agent config folder>:C:/BuildAgent/conf      
     jetbrains/teamcity-minimal-agent
 ```
@@ -63,7 +63,7 @@ You can customize the image via the usual Docker procedure:
 
 1. Run the image
 ```
-docker run -it -e SERVER_URL="<url to TeamCity server>"  \ 
+docker run -e SERVER_URL="<url to TeamCity server>"  \ 
     -v <path to agent config folder>:/data/teamcity_agent/conf  \
     --name="my-customized-agent"  \
     jetbrains/teamcity-minimal-agent  \

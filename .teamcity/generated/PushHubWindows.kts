@@ -226,7 +226,7 @@ removeImageAfterPush = false
 }
 features {
 freeDiskSpace {
-requiredSpace = "42gb"
+requiredSpace = "52gb"
 failBuild = true
 }
 dockerSupport {
@@ -240,10 +240,12 @@ forceCleanCheckout = true
 }
 }
 params {
-param("system.teamcity.agent.ensure.free.space", "42gb")
+param("system.teamcity.agent.ensure.free.space", "52gb")
 }
 requirements {
 contains("docker.server.osType", "windows")
+contains("system.agent.name", "docker")
+contains("system.agent.name", "windows10")
 }
 dependencies {
 snapshot(PublishLocal.publish_local)

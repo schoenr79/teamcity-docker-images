@@ -10,7 +10,9 @@
 # Tag ${versionTag}
 # Platform ${windowsPlatform}
 # Repo ${repo}
-# Weight 3
+# Weight 5
+# Requires system.agent.name contains docker
+# Requires system.agent.name contains windows10
 
 ## ${agentCommentHeader}
 

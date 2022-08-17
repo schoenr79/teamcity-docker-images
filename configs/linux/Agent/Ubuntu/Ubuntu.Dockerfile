@@ -8,6 +8,7 @@
 # ARG teamcityMinimalAgentImage
 # ARG dotnetLibs
 # ARG gitLinuxComponentVersion
+# ARG gitLFSLinuxComponentVersion
 # ARG dockerComposeLinuxComponentVersion
 # ARG dockerLinuxComponentVersion
 
@@ -53,6 +54,7 @@ ARG dotnetLinuxComponent_50
 ARG dotnetLinuxComponentSHA512_50
 ARG dotnetLibs
 ARG gitLinuxComponentVersion
+ARG gitLFSLinuxComponentVersion
 ARG dockerComposeLinuxComponentVersion
 ARG dockerLinuxComponentVersion
 ARG containerdIoLinuxComponentVersion
@@ -60,8 +62,12 @@ ARG p4Version
 
 RUN apt-get update && \
 # Install ${gitLinuxComponentName}
+# Install ${gitLFSLinuxComponentName}
 # Install Mercurial
-    apt-get install -y git=${gitLinuxComponentVersion} mercurial apt-transport-https software-properties-common && \
+    apt-get install -y mercurial apt-transport-https software-properties-common && \
+    add-apt-repository ppa:git-core/ppa -y && \
+    apt-get install -y git=${gitLinuxComponentVersion} git-lfs=${gitLFSLinuxComponentVersion} && \
+    git lfs install --system && \
     # https://github.com/goodwithtech/dockle/blob/master/CHECKPOINT.md#dkl-di-0005
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
 # Install ${p4Name}
@@ -70,7 +76,7 @@ RUN apt-get update && \
       echo "deb http://package.perforce.com/apt/$ID $VERSION_CODENAME release" > \
       /etc/apt/sources.list.d/perforce.list ) && \
     apt-get update && \
-    (. /etc/os-release && apt-get install -y helix-cli="${p4Version}~$VERSION_CODENAME" ) && \
+    (. /etc/os-release && apt-get install -y helix-cli-base="${p4Version}~$VERSION_CODENAME" helix-cli="${p4Version}~$VERSION_CODENAME" ) && \
     # https://github.com/goodwithtech/dockle/blob/master/CHECKPOINT.md#dkl-di-0005
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
 # Install ${dockerLinuxComponentName}, ${containerdIoLinuxComponentName}
